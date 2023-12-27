@@ -12,7 +12,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
   const token = useSelector((state: any) => state.token);
 
   const getPosts = async () => {
-    const response = await fetch("http://localhost:3001/posts", {
+    const response = await fetch("http://localhost:3001/post", {
       method: "GET",
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -22,7 +22,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
 
   const getUserPosts = async () => {
     const response = await fetch(
-      `http://localhost:3001/posts/${userId}/posts`,
+      `http://localhost:3001/post/${userId}/posts`,
       {
         method: "GET",
         headers: { Authorization: `Bearer ${token}` },
@@ -38,7 +38,9 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
     } else {
       getPosts();
     }
-  }, [getPosts, getUserPosts, isProfile]);
+  }, []);
+
+  console.log(posts, 'posts')
 
   return (
     <>
@@ -53,7 +55,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
           picturePath,
           userPicturePath,
           likes,
-          comment,
+          comments,
         }: any) => (
           <PostWidget
             key={_id}
@@ -65,7 +67,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
             picturePath={picturePath}
             userPicturePath={userPicturePath}
             likes={likes}
-            comment={comment}
+            comments={comments}
           />
         )
       )}

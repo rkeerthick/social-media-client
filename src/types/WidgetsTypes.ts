@@ -13,7 +13,7 @@ export type myPostWidgetProps = {
 
 export type postsContainerProps = {
   userId: string;
-  isProfile: boolean;
+  isProfile?: boolean;
 };
 
 export type postWidgetProps = {
@@ -25,5 +25,5 @@ export type postWidgetProps = {
   picturePath: string;
   userPicturePath: string;
   likes: [];
-  comment: [];
+  comments: [];
 };

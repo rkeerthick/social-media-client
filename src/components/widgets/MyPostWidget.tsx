@@ -40,6 +40,7 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
+    console.log("hiii")
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", posts);
@@ -157,7 +158,7 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
         )}
         <Button
           disabled={!posts}
-          onClick={handlePost}
+          onClick={() => handlePost()}
           sx={{
             color: palette.background.alt,
               backgroundColor: palette.primary.main,
