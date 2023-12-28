@@ -211,7 +211,6 @@ const Form = () => {
                     <Dropzone
                       multiple={false}
                       onDrop={(acceptedFiles) => {
-                        console.log(acceptedFiles[0]);
                         setFieldValue("picture", acceptedFiles[0]);
                       }}
                     >

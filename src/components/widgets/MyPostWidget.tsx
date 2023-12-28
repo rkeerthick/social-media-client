@@ -40,11 +40,10 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const medium = palette.neutral.medium;
 
   const handlePost = async () => {
-    console.log("hiii")
     const formData = new FormData();
     formData.append("userId", _id);
     formData.append("description", posts);
-    if (image) {
+    if (isImage) {
       formData.append("picture", image);
       formData.append("picturePath", image.name);
     }

@@ -40,7 +40,6 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
     }
   }, []);
 
-  console.log(posts, 'posts')
 
   return (
     <>

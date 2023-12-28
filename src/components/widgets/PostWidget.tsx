@@ -28,20 +28,18 @@ const PostWidget = ({
 }: postWidgetProps) => {
   const [isComments, setIsComments] = useState<boolean>();
 
-  console.log(comments, 'comments')
-
   const dispatch = useDispatch();
-  const { _id } = useSelector((state: any) => state.user);
   const token = useSelector((state: any) => state.token);
   const loggedInUserId = useSelector((state: any) => state.user._id);
+  const isLiked = Boolean(likes[loggedInUserId]);
   const likeCount = Object.keys(likes).length;
 
-  const isLiked = Boolean(likes[loggedInUserId]);
 
   const { palette } = useTheme<CustomPalette>();
   const primary = palette.primary.main;
   const main = palette.neutral.main;
 
+  
   const patchLikes = async () => {
     const response = await fetch(`http://localhost:3001/post/${postId}/like`, {
       method: "PATCH",
@@ -53,7 +51,7 @@ const PostWidget = ({
     });
 
     const updatedPost = await response.json();
-    dispatch(setPost(updatedPost));
+    dispatch(setPost({post: updatedPost}));
   };
 
   return (
