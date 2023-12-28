@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { CustomPalette } from "types/ThemesType";
 import { myPostWidgetProps } from "types/WidgetsTypes";
+import { addPost } from "utils/apiFunctions";
 
 const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const dispatch = useDispatch();
@@ -71,15 +72,11 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
         formData.append("picture", image);
         formData.append("picturePath", image.name);
       }
-      const response = await fetch("http://localhost:3001/post", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+      const response = addPost(formData, token);
       dispatch(setPost({ post: data }));
         setPosts("");
         setImage(null);
-      return response.json();
+      return response;
     },
 
     // onSuccess: (data) => {
@@ -100,6 +97,7 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
         <InputBase
+          value={posts}
           placeholder="What's on your mind..."
           onChange={(e: any) => setPosts(e.target.value)}
           sx={{
