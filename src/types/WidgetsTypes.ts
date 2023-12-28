@@ -1,3 +1,4 @@
+
 export type userWidgetsTypes = {
   userId: string;
   picturePath: string;
@@ -26,4 +27,8 @@ export type postWidgetProps = {
   userPicturePath: string;
   likes: [];
   comments: [];
+};
+
+export type friendsListWidgetProps = {
+  userId: string;
 };

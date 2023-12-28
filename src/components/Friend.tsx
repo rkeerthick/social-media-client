@@ -27,7 +27,7 @@ const Friend = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
-  const isFriend = friends.some((friend: any) => friend._id === friendId);
+  const isFriend = friends.find((friend: any) => friend._id === friendId);
 
 
   const patchFriend = async () => {

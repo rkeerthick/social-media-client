@@ -42,6 +42,8 @@ const UserWidgets = ({ userId, picturePath }: userWidgetsTypes) => {
 
   if (!user) return null;
 
+  console.log(user, 'user')
+
   const {
     firstName,
     lastName,
