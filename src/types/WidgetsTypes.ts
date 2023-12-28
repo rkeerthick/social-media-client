@@ -1,6 +1,5 @@
-
 export type userWidgetsTypes = {
-  userId: string;
+  userId: string | undefined;
   picturePath: string;
 };
 export type userImageProps = {
@@ -13,7 +12,7 @@ export type myPostWidgetProps = {
 };
 
 export type postsContainerProps = {
-  userId: string;
+  userId: string | undefined;
   isProfile?: boolean;
 };
 
@@ -30,5 +29,5 @@ export type postWidgetProps = {
 };
 
 export type friendsListWidgetProps = {
-  userId: string;
+  userId: string | undefined;
 };

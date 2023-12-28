@@ -30,7 +30,6 @@ const Friend = ({
   
 
   const isFriend = friends.find((friend: any) => friend._id === friendId);
-  // friends.find((friend: any) => friend._id === friendId);
 
 
   const patchFriend = async () => {
