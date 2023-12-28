@@ -18,6 +18,7 @@ import {
   Divider,
   InputBase,
 } from "@mui/material";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import UserImage from "components/UserImage";
@@ -38,24 +39,60 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const isNonMobileScreen = useMediaQuery("(min-width: 1000px)");
   const mediumMain = palette.neutral.mediumMain;
   const medium = palette.neutral.medium;
+  const queryClient = useQueryClient();
 
-  const handlePost = async () => {
-    const formData = new FormData();
-    formData.append("userId", _id);
-    formData.append("description", posts);
-    if (isImage) {
-      formData.append("picture", image);
-      formData.append("picturePath", image.name);
-    }
-    const response = await fetch("http://localhost:3001/post", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${token}` },
-      body: formData,
-    });
-    const post = await response.json();
-    dispatch(setPost({ post }));
-    setPosts(""); 
-    setImage(null);
+  // Define the query key for fetching posts
+  const queryKey: any = isImage ? ["userPosts", _id] : "posts";
+
+  // Fetch posts query
+  const { data } = useQuery({
+    queryKey: ["Fetch Posts"],
+    queryFn: async () => {
+      const response = await fetch(
+        isImage
+          ? `http://localhost:3001/post/${_id}/posts`
+          : "http://localhost:3001/post",
+        {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      return response.json();
+    },
+  });
+
+  // Define the post mutation
+  const postMutation = useMutation({
+    mutationFn: async () => {
+      const formData = new FormData();
+      formData.append("userId", _id);
+      formData.append("description", posts);
+      if (isImage) {
+        formData.append("picture", image);
+        formData.append("picturePath", image.name);
+      }
+      const response = await fetch("http://localhost:3001/post", {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}` },
+        body: formData,
+      });
+      dispatch(setPost({ post: data }));
+        setPosts("");
+        setImage(null);
+      return response.json();
+    },
+
+    // onSuccess: (data) => {
+    //   // Invalidate and refetch the posts query
+    //   queryClient.invalidateQueries(queryKey);
+    //   dispatch(setPost({ post: data }));
+    //   setPosts("");
+    //   setImage(null);
+    // },
+  });
+
+  const handlePost = () => {
+    postMutation.mutate();
   };
 
   return (
@@ -160,8 +197,8 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
           onClick={() => handlePost()}
           sx={{
             color: palette.background.alt,
-              backgroundColor: palette.primary.main,
-            borderRadius: "3rem"
+            backgroundColor: palette.primary.main,
+            borderRadius: "3rem",
           }}
         >
           Post
