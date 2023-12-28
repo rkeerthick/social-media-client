@@ -27,7 +27,10 @@ const Friend = ({
   const main = palette.neutral.main;
   const medium = palette.neutral.medium;
 
+  
+
   const isFriend = friends.find((friend: any) => friend._id === friendId);
+  // friends.find((friend: any) => friend._id === friendId);
 
 
   const patchFriend = async () => {
@@ -42,7 +45,7 @@ const Friend = ({
       }
     );
     const data = await response.json();
-    dispatch(setFriends({ friends: data }));
+    dispatch(setFriends(data));
   };
 
   return (

@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 
 const HomePage = () => {
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
-  const { _id, picturePath } = useSelector((state: any) => state.user);
+  const user = useSelector((state: any) => state.user);
+  console.log(user, 'user')
   return (
     <Box>
       <Navbar />
@@ -23,20 +24,20 @@ const HomePage = () => {
         justifyContent="space-between"
       >
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-          <UserWidgets userId={_id} picturePath={picturePath} />
+          <UserWidgets userId={user._id} picturePath={user.picturePath} />
         </Box>
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}
           marginTop={isNonMobileScreens ? undefined : "2rem"}
         >
-          <MyPostWidget picturePath={picturePath} />
-          <PostsContainer userId={_id} />
+          <MyPostWidget picturePath={user.picturePath} />
+          <PostsContainer userId={user._id} />
         </Box>
         {isNonMobileScreens && (
           <Box flexBasis="27%" >
             <AdWidget />
             <Box margin="2rem 0">
-              <FriendsListWidget userId={_id} />
+              <FriendsListWidget userId={user._id} />
             </Box>
           </Box>
         )}

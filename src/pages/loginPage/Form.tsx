@@ -67,6 +67,8 @@ const Form = () => {
     }
     formData.append("picturePath", values.picture.name);
 
+    console.log(formData, 'form data')
+
     const savedUserResponse = await fetch(
       "http://localhost:3001/auth/register",
       {
@@ -90,7 +92,8 @@ const Form = () => {
     });
     const loggedIn = await loggedInResponse.json();
     onSubmitProps.resetForm();
-    if (loggedIn) {
+    console.log(loggedIn.user)
+    if (loggedIn.token.length > 0) {
       dispatch(
         setLogin({
           user: loggedIn.user,

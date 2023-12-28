@@ -12,8 +12,10 @@ const FriendsListWidget = ({ userId }: friendsListWidgetProps) => {
   const dispatch = useDispatch();
   const { palette } = useTheme<CustomPalette>();
   const token = useSelector((state: any) => state.token);
-    const friends = useSelector((state: any) => state.user.friends);
-    const dummy = useSelector((state: any) => state.user)
+  const friends = useSelector((state: any) => state.user.friends);
+  const dummy = useSelector((state: any) => state.user);
+
+  console.log(friends, "friends");
 
   const getFriends = async () => {
     const response = await fetch(
@@ -30,8 +32,8 @@ const FriendsListWidget = ({ userId }: friendsListWidgetProps) => {
   useEffect(() => {
     getFriends();
   }, []);
-    
-    console.log(dummy, 'friends')
+
+  console.log(dummy, "friends");
 
   return (
     <WidgetWrapper>
