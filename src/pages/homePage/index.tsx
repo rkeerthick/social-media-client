@@ -10,9 +10,9 @@ import { useSelector } from "react-redux";
 
 
 const HomePage = () => {
+
   const isNonMobileScreens = useMediaQuery("(min-width: 1000px)");
   const user = useSelector((state: any) => state.user);
-  console.log(user, 'user')
   return (
     <Box>
       <Navbar />

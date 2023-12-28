@@ -6,9 +6,9 @@ import PostWidget from "components/widgets/PostWidget";
 import { postsContainerProps } from "types/WidgetsTypes";
 import { userTypes } from "types/StateTypes";
 
-const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
+const PostsContainer = ({ userId, isProfile = false }: postsContainerProps) => {
   const dispatch = useDispatch();
-  const posts = useSelector((state: any) => state.posts);
+  let posts = useSelector((state: any) => state.posts);
   const token = useSelector((state: any) => state.token);
 
   const getPosts = async () => {
@@ -17,7 +17,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
       headers: { Authorization: `Bearer ${token}` },
     });
     const data = await response.json();
-    dispatch(setPosts({ posts: data }));
+    dispatch(setPosts({posts: data}));
   };
 
   const getUserPosts = async () => {
@@ -32,6 +32,8 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
     dispatch(setPosts({ posts: data }));
   };
 
+  posts = useSelector((state: any) => state.posts);
+
   useEffect(() => {
     if (isProfile) {
       getUserPosts();
@@ -43,7 +45,7 @@ const PostsContainer = ({ userId, isProfile }: postsContainerProps) => {
 
   return (
     <>
-      {posts.map(
+      { posts.map(
         ({
           _id,
           userId,

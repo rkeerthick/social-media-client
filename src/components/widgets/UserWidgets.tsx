@@ -22,6 +22,7 @@ const UserWidgets = ({ userId, picturePath }: userWidgetsTypes) => {
   const { palette } = useTheme<CustomPalette>();
   const navigate = useNavigate();
   const token = useSelector((state: any) => state.token);
+  const friendsList = useSelector((state: any) => state.friends);
   const dark = palette.neutral.dark;
   const medium = palette.neutral.medium;
   const main = palette.neutral.main;
@@ -79,7 +80,7 @@ const UserWidgets = ({ userId, picturePath }: userWidgetsTypes) => {
             >
               {firstName} {lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} Friends</Typography>
+            <Typography color={medium}>{friendsList?.length} Friends</Typography>
           </Box>
         </FlexBetween>
         <ManageAccountsOutlined />

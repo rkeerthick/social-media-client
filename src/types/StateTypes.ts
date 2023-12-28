@@ -2,7 +2,7 @@ export type initialStateTypes = {
   mode: "light" | "dark";
   user: userTypes | null;
   token: string | null;
-  posts: any;
+  posts: any[];
 };
 
 export type userTypes = {
