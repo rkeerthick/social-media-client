@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { CustomPalette } from "types/ThemesType";
 import { myPostWidgetProps } from "types/WidgetsTypes";
-import { addPost } from "utils/apiFunctions";
+import { addPost, fetchPosts } from "utils/apiFunctions";
 
 const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const dispatch = useDispatch();
@@ -42,27 +42,13 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const medium = palette.neutral.medium;
   const queryClient = useQueryClient();
 
-  // Define the query key for fetching posts
   const queryKey: any = isImage ? ["userPosts", _id] : "posts";
 
-  // Fetch posts query
   const { data } = useQuery({
     queryKey: ["Fetch Posts"],
-    queryFn: async () => {
-      const response = await fetch(
-        isImage
-          ? `http://localhost:3001/post/${_id}/posts`
-          : "http://localhost:3001/post",
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
-      return response.json();
-    },
+    queryFn: () => fetchPosts(_id, token, isImage)
   });
 
-  // Define the post mutation
   const postMutation = useMutation({
     mutationFn: async () => {
       const formData = new FormData();

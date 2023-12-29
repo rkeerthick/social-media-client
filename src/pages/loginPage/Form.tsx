@@ -83,8 +83,6 @@ const Form = () => {
 
   const login = async (values: any, onSubmitProps: any) => {
     try {
-
-      debugger
       const loggedIn = await loginMutation.mutateAsync(values);
 
       dispatch(

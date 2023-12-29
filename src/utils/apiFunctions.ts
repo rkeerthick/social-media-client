@@ -1,3 +1,16 @@
+export const fetchPosts = async (_id: string, token: string, isImage: boolean) => {
+  const response = await fetch(
+    isImage
+      ? `http://localhost:3001/post/${_id}/posts`
+      : "http://localhost:3001/post",
+    {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+  return response.json();
+}
+
 export const addPost = async (data: any, token: string) => {
     const response = await fetch("http://localhost:3001/post", {
       method: "POST",
