@@ -16,3 +16,20 @@ export const getUserProfile = async(userId: string | undefined, token: string) =
   });
   return response.json();
 }
+
+export const registerUser =async (data: any) => {
+  const response = await fetch("http://localhost:3001/auth/register", {
+    method: "POST",
+    body: data,
+  });
+  return response.json();
+}
+
+export const loginUser = async (data: any) => {
+  const response = await fetch("http://localhost:3001/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+  return response.json();
+}

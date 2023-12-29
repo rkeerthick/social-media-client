@@ -16,10 +16,8 @@ import { setLogin } from "state";
 import Dropzone from "react-dropzone";
 import FlexBetween from "components/FlexBetween";
 import { CustomPalette } from "types/ThemesType";
-import {
-  initialValuesLoginTypes,
-  initialValuesRegisterTypes,
-} from "types/FormTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { loginUser, registerUser } from "utils/apiFunctions";
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -59,6 +57,11 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width: 600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+  const queryClient = useQueryClient();
+
+  // Define mutations for registration and login
+  const registerMutation = useMutation({mutationFn: registerUser});
+  const loginMutation = useMutation({ mutationFn: loginUser});
 
   const register = async (values: any, onSubmitProps: any) => {
     const formData = new FormData();
@@ -67,33 +70,23 @@ const Form = () => {
     }
     formData.append("picturePath", values.picture.name);
 
-    console.log(formData, 'form data')
-
-    const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-    const savedUser = await savedUserResponse.json();
-    onSubmitProps.resetForm();
-
-    if (savedUser) {
+    try {
+      await registerMutation.mutateAsync(formData);
+      // queryClient.invalidateQueries("user"); 
       setPageType("login");
+    } catch (error: any) {
+      console.log("Register Error : ", error.message);
+    } finally {
+      onSubmitProps.resetForm();
     }
   };
 
   const login = async (values: any, onSubmitProps: any) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    onSubmitProps.resetForm();
-    console.log(loggedIn.user)
-    if (loggedIn.token.length > 0) {
+    try {
+
+      debugger
+      const loggedIn = await loginMutation.mutateAsync(values);
+
       dispatch(
         setLogin({
           user: loggedIn.user,
@@ -101,6 +94,10 @@ const Form = () => {
         })
       );
       navigate("/home");
+    } catch (error: any) {
+      console.log("Login Error : ", error.message)
+    } finally {
+      onSubmitProps.resetForm();
     }
   };
 
@@ -116,7 +113,6 @@ const Form = () => {
       validationSchema={isLogin ? loginSchema : registerSchema}
     >
       {({
-        //   values
         values,
         errors,
         touched,
@@ -293,7 +289,7 @@ const Form = () => {
                 sx={{
                   textDecoration: "underline",
                   color: theme.palette.primary.main,
-                  "&.hover": {
+                  "&:hover": {
                     cursor: "pointer",
                     color: theme.palette.primary.light,
                   },

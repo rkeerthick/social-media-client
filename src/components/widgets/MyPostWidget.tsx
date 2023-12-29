@@ -74,8 +74,8 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
       }
       const response = addPost(formData, token);
       dispatch(setPost({ post: data }));
-        setPosts("");
-        setImage(null);
+      setPosts("");
+      setImage(null);
       return response;
     },
 
