@@ -50,7 +50,7 @@ const initialValuesLogin: any = {
 };
 
 const Form = () => {
-  const [pageType, setPageType] = useState<string>("register");
+  const [pageType, setPageType] = useState<string>("login");
   const theme = useTheme<CustomPalette>();
   const dispatch = useDispatch();
   const navigate = useNavigate();

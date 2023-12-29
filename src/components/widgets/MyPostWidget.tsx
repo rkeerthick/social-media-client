@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setPost } from "state";
 import { CustomPalette } from "types/ThemesType";
 import { myPostWidgetProps } from "types/WidgetsTypes";
-import { addPost, fetchPosts } from "utils/apiFunctions";
+import { addPost, fetchPostsCond } from "utils/apiFunctions";
 
 const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   const dispatch = useDispatch();
@@ -46,7 +46,7 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
 
   const { data } = useQuery({
     queryKey: ["Fetch Posts"],
-    queryFn: () => fetchPosts(_id, token, isImage)
+    queryFn: () => fetchPostsCond(_id, token, isImage),
   });
 
   const postMutation = useMutation({
@@ -58,20 +58,19 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
         formData.append("picture", image);
         formData.append("picturePath", image.name);
       }
-      const response = addPost(formData, token);
-      dispatch(setPost({ post: data }));
+      const response = await addPost(formData, token);
       setPosts("");
       setImage(null);
       return response;
     },
 
-    // onSuccess: (data) => {
-    //   // Invalidate and refetch the posts query
-    //   queryClient.invalidateQueries(queryKey);
-    //   dispatch(setPost({ post: data }));
-    //   setPosts("");
-    //   setImage(null);
-    // },
+    onSuccess: (data) => {
+      // Invalidate and refetch the posts query
+      queryClient.invalidateQueries(queryKey);
+      dispatch(setPost({ posts: data }));
+      setPosts("");
+      setImage(null);
+    },
   });
 
   const handlePost = () => {
@@ -79,7 +78,7 @@ const MyPostWidget = ({ picturePath }: myPostWidgetProps) => {
   };
 
   return (
-    <WidgetWrapper>
+    <WidgetWrapper marginBottom="0.5rem">
       <FlexBetween gap="1.5rem">
         <UserImage image={picturePath} />
         <InputBase
