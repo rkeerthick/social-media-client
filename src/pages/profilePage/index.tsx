@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, useMediaQuery } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import Navbar from "components/navbar";
@@ -8,29 +8,30 @@ import FriendsListWidget from "components/widgets/FriendsListWidget";
 import MyPostWidget from "components/widgets/MyPostWidget";
 import PostsContainer from "containers/PostsContainer";
 import UserWidgets from "components/widgets/UserWidgets";
+import { useQuery } from "@tanstack/react-query";
+import { getUserProfile } from "utils/apiFunctions";
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<any>(null);
   const { userId } = useParams();
   const token = useSelector((state: any) => state.token);
   const isNonMobileScreen = useMediaQuery("(min-width: 1000px)");
 
-  const getUser = async () => {
-    const response = await fetch(`http://localhost:3001/user/${userId}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const data = await response.json();
-    setUser(data);
-  };
+  const userQueryKey = ["user", userId];
 
-  useEffect(() => {
-    getUser();
-  }, []);
+  const { data: user, isLoading: userLoading } = useQuery({
+    queryKey: userQueryKey,
+    queryFn : async () => {
+      const response = getUserProfile(userId, token);
+      return response;
+    }
+  });
 
-  if (!user) return null;
+  // useEffect(() => {
+  // }, [user]);
+
+  if (userLoading || !user) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Box>
@@ -54,6 +55,7 @@ const ProfilePage = () => {
           <MyPostWidget picturePath={user.picturePath} />
           <Box margin="2rem 0" />
 
+          {/* Define the query key for fetching posts */}
           <PostsContainer userId={userId} />
         </Box>
       </Box>
